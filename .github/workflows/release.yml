@@ -36,19 +36,19 @@ jobs:
       - name: Build binaries
         run: |
           mkdir -p dist
-          
+
           LDFLAGS="-X main.Version=${{ steps.version.outputs.version }} -X main.Commit=${{ steps.commit.outputs.commit }} -X main.BuildDate=${{ steps.date.outputs.date }}"
-          
-          GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimportgen-${{ steps.version.outputs.version }}-linux-amd64 ./cmd/tfimportgen
-          GOOS=linux GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/tfimportgen-${{ steps.version.outputs.version }}-linux-arm64 ./cmd/tfimportgen
-          GOOS=darwin GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimportgen-${{ steps.version.outputs.version }}-darwin-amd64 ./cmd/tfimportgen
-          GOOS=darwin GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/tfimportgen-${{ steps.version.outputs.version }}-darwin-arm64 ./cmd/tfimportgen
-          GOOS=windows GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimportgen-${{ steps.version.outputs.version }}-windows-amd64.exe ./cmd/tfimportgen
+
+          GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimport-cli-${{ steps.version.outputs.version }}-linux-amd64 ./cmd/tfimport-cli
+          GOOS=linux GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/tfimport-cli-${{ steps.version.outputs.version }}-linux-arm64 ./cmd/tfimport-cli
+          GOOS=darwin GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimport-cli-${{ steps.version.outputs.version }}-darwin-amd64 ./cmd/tfimport-cli
+          GOOS=darwin GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/tfimport-cli-${{ steps.version.outputs.version }}-darwin-arm64 ./cmd/tfimport-cli
+          GOOS=windows GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/tfimport-cli-${{ steps.version.outputs.version }}-windows-amd64.exe ./cmd/tfimport-cli
 
       - name: Generate checksums
         run: |
           cd dist
-          sha256sum tfimportgen-* > SHA256SUMS
+          sha256sum tfimport-cli-* > SHA256SUMS
           cat SHA256SUMS
 
       - name: Create Release
@@ -84,8 +84,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/tfimportgen-${{ steps.version.outputs.version }}-linux-amd64
-          asset_name: tfimportgen-${{ steps.version.outputs.version }}-linux-amd64
+          asset_path: ./dist/tfimport-cli-${{ steps.version.outputs.version }}-linux-amd64
+          asset_name: tfimport-cli-${{ steps.version.outputs.version }}-linux-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Linux ARM64
@@ -94,8 +94,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/tfimportgen-${{ steps.version.outputs.version }}-linux-arm64
-          asset_name: tfimportgen-${{ steps.version.outputs.version }}-linux-arm64
+          asset_path: ./dist/tfimport-cli-${{ steps.version.outputs.version }}-linux-arm64
+          asset_name: tfimport-cli-${{ steps.version.outputs.version }}-linux-arm64
           asset_content_type: application/octet-stream
 
       - name: Upload Darwin AMD64
@@ -104,8 +104,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/tfimportgen-${{ steps.version.outputs.version }}-darwin-amd64
-          asset_name: tfimportgen-${{ steps.version.outputs.version }}-darwin-amd64
+          asset_path: ./dist/tfimport-cli-${{ steps.version.outputs.version }}-darwin-amd64
+          asset_name: tfimport-cli-${{ steps.version.outputs.version }}-darwin-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Darwin ARM64
@@ -114,8 +114,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/tfimportgen-${{ steps.version.outputs.version }}-darwin-arm64
-          asset_name: tfimportgen-${{ steps.version.outputs.version }}-darwin-arm64
+          asset_path: ./dist/tfimport-cli-${{ steps.version.outputs.version }}-darwin-arm64
+          asset_name: tfimport-cli-${{ steps.version.outputs.version }}-darwin-arm64
           asset_content_type: application/octet-stream
 
       - name: Upload Windows AMD64
@@ -124,8 +124,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/tfimportgen-${{ steps.version.outputs.version }}-windows-amd64.exe
-          asset_name: tfimportgen-${{ steps.version.outputs.version }}-windows-amd64.exe
+          asset_path: ./dist/tfimport-cli-${{ steps.version.outputs.version }}-windows-amd64.exe
+          asset_name: tfimport-cli-${{ steps.version.outputs.version }}-windows-amd64.exe
           asset_content_type: application/octet-stream
 
       - name: Upload Checksums

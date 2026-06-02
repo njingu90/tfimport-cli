@@ -52,7 +52,7 @@ jobs:
           fi
 
       - name: Build binary
-        run: go build -o tfimportgen ./cmd/tfimportgen
+        run: go build -o tfimport-cli ./cmd/tfimport-cli
 
       - name: Verify binary
-        run: ./tfimportgen --version
+        run: ./tfimport-cli --version
