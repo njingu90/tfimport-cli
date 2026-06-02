@@ -98,6 +98,10 @@ var awsDynamicResourceSchema = map[string]ResourceIDSchema{
 	"aws_vpc_endpoint_service": {
 		IDAttributes: []string{"id"},
 	},
+	"aws_vpc_endpoint_route_table_association": {
+		CompoundAttributes: []string{"vpc_endpoint_id", "route_table_id"},
+		Separator:          "/",
+	},
 
 	// Security Groups
 	"aws_security_group": {
@@ -313,6 +317,10 @@ var awsDynamicResourceSchema = map[string]ResourceIDSchema{
 	"aws_cloudwatch_log_stream": {
 		CompoundAttributes: []string{"log_group_name", "name"},
 		Separator:          ":",
+	},
+	"aws_cloudwatch_log_subscription_filter": {
+		CompoundAttributes: []string{"log_group_name", "name"},
+		Separator:          "|",
 	},
 	"aws_cloudwatch_log_resource_policy": {
 		IDAttributes: []string{"policy_name"},
