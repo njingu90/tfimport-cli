@@ -1,0 +1,39 @@
+# Binaries
+/bin
+/dist
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Test binaries
+*.test
+*.out
+
+# Build artifacts
+.build/
+build/
+/tfimportgen
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Dependencies
+vendor/
+
+# Logs
+*.log
+logs/
+
+# Generated
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl

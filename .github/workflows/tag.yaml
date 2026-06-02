@@ -1,0 +1,44 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: 'Semantic version tag (e.g., v1.0.0, v1.2.3)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    name: Create and Push Tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate tag format
+        run: |
+          TAG="${{ inputs.tag }}"
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Invalid tag format: $TAG"
+            echo "Expected format: v1.0.0 (semantic versioning)"
+            exit 1
+          fi
+          echo "✓ Tag format valid: $TAG"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Create and push tag ${{ inputs.tag }}
+        run: |
+          git tag "${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
+          echo "✓ Tag created and pushed: ${{ inputs.tag }}"
