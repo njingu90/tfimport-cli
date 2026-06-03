@@ -14,7 +14,6 @@ func ListCommand(gf GlobalFlags, args []string) error {
 	}
 
 	subcommand := args[0]
-	subargs := args[1:]
 
 	// Load state
 	var state *pkg.TerraformState
@@ -47,7 +46,7 @@ func ListCommand(gf GlobalFlags, args []string) error {
 	case "modules":
 		return listModules(state, gf.Verbose)
 	case "resources":
-		return listResources(state, subargs, gf.Verbose)
+		return listResources(state, gf)
 	case "resource-types":
 		return listResourceTypes(state, gf.Verbose)
 	default:
@@ -114,24 +113,19 @@ func listResourceTypes(state *pkg.TerraformState, verbose bool) error {
 }
 
 // listResources lists resources from a specific module or with a specific type
-func listResources(state *pkg.TerraformState, args []string, verbose bool) error {
-	cf, err := ParseCommandFlags(args)
-	if err != nil {
-		return fmt.Errorf("failed to parse flags: %w", err)
-	}
-
+func listResources(state *pkg.TerraformState, gf GlobalFlags) error {
 	var resources []pkg.Resource
 
-	if cf.Module != "" {
-		if verbose {
-			PrintInfo(fmt.Sprintf("Filtering by module: %s", cf.Module))
+	if gf.Module != "" {
+		if gf.Verbose {
+			PrintInfo(fmt.Sprintf("Filtering by module: %s", gf.Module))
 		}
-		resources = pkg.FilterByModule(pkg.GetAllResources(state), cf.Module)
-	} else if cf.Type != "" {
-		if verbose {
-			PrintInfo(fmt.Sprintf("Filtering by type: %s", cf.Type))
+		resources = pkg.FilterByModule(pkg.GetAllResources(state), gf.Module)
+	} else if gf.Type != "" {
+		if gf.Verbose {
+			PrintInfo(fmt.Sprintf("Filtering by type: %s", gf.Type))
 		}
-		resources = pkg.FilterByResourceType(pkg.GetAllResources(state), cf.Type)
+		resources = pkg.FilterByResourceType(pkg.GetAllResources(state), gf.Type)
 	} else {
 		resources = pkg.GetAllResources(state)
 	}

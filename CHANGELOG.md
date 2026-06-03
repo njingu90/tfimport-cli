@@ -7,6 +7,7 @@ All notable changes to tfimport-cli will be documented in this file.
 ### Fixed
 - **aws_cloudwatch_log_subscription_filter**: Import ID now uses `|` separator (`log_group_name|name`)
 - **aws_vpc_endpoint_route_table_association**: Import ID now uses `/` separator (`vpc_endpoint_id/route_table_id`)
+- **Module and Type Flags**: Fixed `-module` and `-type` flags not being recognized in `generate` and `list` commands
 
 ## [1.0.0] - 2026-06-02
 

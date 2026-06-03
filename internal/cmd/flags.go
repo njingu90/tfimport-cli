@@ -13,6 +13,8 @@ type GlobalFlags struct {
 	Workspace    string
 	OutputFile   string
 	SummaryFile  string
+	Module       string
+	Type         string
 	DryRun       bool
 	Verbose      bool
 }
@@ -33,6 +35,8 @@ func ParseGlobalFlags(args []string) (GlobalFlags, []string, error) {
 	fs.StringVar(&gf.Workspace, "workspace", "", "Terraform Cloud workspace")
 	fs.StringVar(&gf.OutputFile, "out", "", "Output file for generated import blocks")
 	fs.StringVar(&gf.SummaryFile, "summary", "", "Output file for JSON summary report")
+	fs.StringVar(&gf.Module, "module", "", "Filter by module (e.g., module.network)")
+	fs.StringVar(&gf.Type, "type", "", "Filter by resource type")
 	fs.BoolVar(&gf.DryRun, "dry-run", false, "Perform analysis without writing files")
 	fs.BoolVar(&gf.Verbose, "verbose", false, "Enable verbose output")
 
@@ -121,13 +125,17 @@ Global Options:
   -workspace string       Terraform Cloud workspace
   -out string            Output file for generated imports (default: imports.tf)
   -summary string        Output file for JSON summary
+  -module string         Filter by module (e.g., module.network)
+  -type string           Filter by resource type (e.g., aws_vpc)
   -dry-run               Perform analysis without writing files
   -verbose               Enable verbose output
 
 Examples:
   tfimport-cli analyze -state terraform.tfstate
   tfimport-cli generate -state terraform.tfstate -module module.network
+  tfimport-cli generate -organization my-org -workspace prod -type aws_vpc
   tfimport-cli list modules -state terraform.tfstate
+  tfimport-cli list resources -state terraform.tfstate -module module.vpc
   tfimport-cli validate -organization my-org -workspace prod
 `
 	fmt.Fprint(os.Stderr, usage)

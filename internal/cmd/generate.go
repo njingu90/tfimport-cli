@@ -9,14 +9,9 @@ import (
 
 // GenerateCommand handles the generate subcommand
 func GenerateCommand(gf GlobalFlags, args []string) error {
-	// Parse command-specific flags
-	cf, err := ParseCommandFlags(args)
-	if err != nil {
-		return fmt.Errorf("failed to parse flags: %w", err)
-	}
-
 	// Load state
 	var state *pkg.TerraformState
+	var err error
 
 	if gf.StatePath != "" {
 		if gf.Verbose {
@@ -53,22 +48,22 @@ func GenerateCommand(gf GlobalFlags, args []string) error {
 	}
 
 	// Apply module filter if specified
-	if cf.Module != "" {
+	if gf.Module != "" {
 		if gf.Verbose {
-			PrintInfo(fmt.Sprintf("Filtering by module: %s", cf.Module))
+			PrintInfo(fmt.Sprintf("Filtering by module: %s", gf.Module))
 		}
-		resources = pkg.FilterByModule(resources, cf.Module)
+		resources = pkg.FilterByModule(resources, gf.Module)
 		if gf.Verbose {
 			PrintInfo(fmt.Sprintf("After module filter: %d resources", len(resources)))
 		}
 	}
 
 	// Apply resource type filter if specified
-	if cf.Type != "" {
+	if gf.Type != "" {
 		if gf.Verbose {
-			PrintInfo(fmt.Sprintf("Filtering by type: %s", cf.Type))
+			PrintInfo(fmt.Sprintf("Filtering by type: %s", gf.Type))
 		}
-		resources = pkg.FilterByResourceType(resources, cf.Type)
+		resources = pkg.FilterByResourceType(resources, gf.Type)
 		if gf.Verbose {
 			PrintInfo(fmt.Sprintf("After type filter: %d resources", len(resources)))
 		}
